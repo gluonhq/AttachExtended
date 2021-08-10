@@ -1,0 +1,6 @@
+[
+  {
+    "name" : "com.gluonhq.attachextended.log.impl.IOSLogService",
+    "methods":[{"name":"<init>","parameterTypes":[] }]
+  }
+]

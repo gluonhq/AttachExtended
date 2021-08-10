@@ -1,0 +1,6 @@
+[
+  {
+    "name" : "com.gluonhq.attachextended.log.impl.DesktopLogService",
+    "methods":[{"name":"<init>","parameterTypes":[] }]
+  }
+]

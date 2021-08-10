@@ -1,0 +1,6 @@
+[
+  {
+    "name" : "com.gluonhq.attachextended.log.impl.AndroidLogService",
+    "methods":[{"name":"<init>","parameterTypes":[] }]
+  }
+]

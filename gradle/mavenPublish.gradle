@@ -1,0 +1,61 @@
+apply from: rootProject.file("gradle/native-build.gradle")
+
+apply plugin: 'java'
+apply plugin: 'maven-publish'
+apply plugin: 'signing'
+
+jar {
+    exclude "**/impl/Desktop**", "**/impl/IOS**", "**/impl/Android**", "META-INF/substrate"
+}
+
+task sourcesJar(type: Jar) {
+    from sourceSets.main.allJava
+    archiveClassifier.set('sources')
+}
+
+task javadocJar(type: Jar, dependsOn: javadoc) {
+    from javadoc.destinationDir
+    archiveClassifier.set('javadoc')
+}
+
+publishing {
+    publications {
+        maven(MavenPublication) {
+
+            from components.java
+            artifact sourcesJar
+            artifact javadocJar
+            artifact androidJar
+            artifact iosJar
+            artifact desktopJar
+
+            pom {
+                name = "Gluon Attach Extended (${project.name})"
+                description = "API for accessing ${project.name} features"
+                url = 'https://github.com/gluonhq/AttachExtended'
+
+                licenses {
+                    license {
+                        name = 'The GNU General Public License'
+                        url = 'https://opensource.org/licenses/GPL-3.0'
+                        distribution = 'repo'
+                    }
+                }
+            }
+
+            pom.withXml {
+                Node pomNode = asNode()
+                pomNode.dependencies.'*'.findAll() {
+                    it.groupId.text() == 'org.openjfx'
+                }.each {
+                    it.parent().remove(it)
+                }
+            }
+        }
+    }
+}
+
+signing {
+    sign publishing.publications.maven
+    required = { gradle.taskGraph.hasTask(publish) && !version.endsWith("SNAPSHOT") }
+}

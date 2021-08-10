@@ -1,0 +1,63 @@
+plugins {
+    id 'java-library'
+    id "org.openjfx.javafxplugin" version "0.0.10" apply false
+}
+
+if (System.getProperty('os.name').toLowerCase().contains("mac")) {
+    new ByteArrayOutputStream().withStream { os ->
+        exec {
+            args '-version', '-sdk', 'iphoneos', 'SDKVersion'
+            executable 'xcodebuild'
+            standardOutput = os
+        }
+        ext.IOS_VERSION = os.toString().trim()
+        println "IOS version: $IOS_VERSION"
+    }
+} else {
+    ext.IOS_VERSION = ""
+}
+
+ext.libraryVersions = [attach: '4.0.12-SNAPSHOT']
+
+subprojects {
+    apply plugin: "org.openjfx.javafxplugin"
+    apply from: rootProject.file('gradle/mavenPublish.gradle')
+
+    sourceCompatibility = 11
+    targetCompatibility = 11
+
+    repositories {
+        mavenCentral()
+        maven {
+            url = "https://oss.sonatype.org/content/repositories/snapshots/"
+        }
+    }
+
+    javafx {
+        modules 'javafx.graphics'
+    }
+}
+
+task copyModuleSources {
+    doFirst {
+        subprojects.each {p ->
+            copy {
+                from p.sourceSets.main.java
+                into "${buildDir}/modules/sources/${p.ext.moduleName}"
+            }
+        }
+    }
+}
+
+javadoc {
+    doFirst {
+        subprojects.each {p -> classpath += p.sourceSets.main.compileClasspath }
+        options.addStringOption('-module-path', classpath.asPath)
+    }
+    exclude("com/gluonhq/attach/*/impl")
+    source fileTree("${buildDir}/modules/sources")
+    options.addStringOption("-module-source-path", "$buildDir/modules/sources")
+    classpath = files()
+    title "Custom Attach ${project.version} API"
+    dependsOn copyModuleSources
+}
