@@ -40,9 +40,9 @@ Read about Attach: [Device Interface](https://docs.gluonhq.com/#_device_interfac
 
 The section [Building Attach](https://docs.gluonhq.com/#_building_attach) contains more advanced information.
 
-### How to build and install Attach ###
+### How to build and install Attach Extended ###
 
-To build the Custom Attach services on the project's root, run:
+To build the Attach Extended services on the project's root, run:
 
 `./gradlew clean build`
 
