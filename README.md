@@ -23,7 +23,7 @@ These are the requisites:
 
 * A recent version of [JDK 11](http://jdk.java.net/11/) or superior
 * Gradle 6.0 or superior. 
-* Attach Util 4.0.12-SNAPSHOT or superior
+* Attach Util 4.0.12 or superior
 
 To build the iOS Services:
  
@@ -55,16 +55,23 @@ When the process finishes successfully, the different services can be added to a
 For instance, the Log service for desktop can be added to the project like:
 
 ```
+<repositories>
+    <repository>
+        <id>Gluon</id>
+        <url>https://nexus.gluonhq.com/nexus/content/repositories/releases</url>
+    </repository>
+</repositories>
+
 <!-- dependencies -->
 <dependency>
     <groupId>com.gluonhq.attachextended</groupId>
     <artifactId>log</artifactId>
-    <version>4.0.12-SNAPSHOT</version>
+    <version>4.0.12</version>
 </dependency>
 <dependency>
     <groupId>com.gluonhq.attachextended</groupId>
     <artifactId>log</artifactId>
-    <version>4.0.12-SNAPSHOT</version>
+    <version>4.0.12</version>
     <classifier>desktop</classifier>
     <scope>runtime</scope>
 </dependency>
