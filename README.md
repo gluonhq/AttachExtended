@@ -9,11 +9,15 @@ used to deliver the functionality.
 Attach is open source, and it is freely licensed under the GPL license.
 [Gluon](http://gluonhq.com) can provide [custom consultancy](http://gluonhq.com/services/consulting/) and [training](http://gluonhq.com/services/training/), commercial licenses, and open source [commercial support](http://gluonhq.com/services/commercial-support/), including daily and monthly releases.
 
-Attach Extended is a demo project intended to show how to extend and create custom Attach services outside Attach itself.
+_What happens if Attach doesn't include the service or feature that you require?_
 
-Once the service has been tested in all possible platforms, it could be contributed back to Attach via [Pull Request](https://github.com/gluonhq/attach/pulls).
+You can always ask for support (see previous links) to develop this service for you, but you could try to implement it on your own. 
 
-*Note*: As a custom service, it can't use the official `com.gluonhq.attach` package name.
+Attach Extended is a demo project intended to show how to extend and create custom Attach services outside Attach itself. 
+
+As a custom service, it can't use the `com.gluonhq.attach` package name. This avoids the need of modifying the GluonFX plugins to include the service, and it can be used as a regular dependency, with its platform classifiers.
+
+Once the service has been tested in all possible platforms, it could be contributed to Attach via [Pull Request](https://github.com/gluonhq/attach/pulls).
 
 ## Building Attach Extended ##
 
