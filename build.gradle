@@ -17,7 +17,7 @@ if (System.getProperty('os.name').toLowerCase().contains("mac")) {
     ext.IOS_VERSION = ""
 }
 
-ext.libraryVersions = [attach: '4.0.12']
+ext.libraryVersions = [attach: '4.0.13']
 
 subprojects {
     apply plugin: "org.openjfx.javafxplugin"
