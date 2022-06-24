@@ -377,7 +377,7 @@ ext.nativeBuildLib = { buildDir, projectDir, name, os ->
         }
 
         def linkerObj = [outputDir.listFiles().findAll {it.name.endsWith(".o")}].flatten()
-        def linkerOutput = "$buildDir/native/$os/lib${name.toLowerCase()}.a"
+        def linkerOutput = "$buildDir/native/$os/libatt_ext_${name.toLowerCase()}.a"
         def linkerArgs = ["rcs", linkerOutput, linkerObj].flatten()
 
         exec {
