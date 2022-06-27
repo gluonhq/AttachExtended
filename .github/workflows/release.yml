@@ -1,0 +1,47 @@
+name: AttachExtended Release
+on:
+  push:
+    tags:
+      - '*'
+
+jobs:
+  build:
+    name: Deploy
+    runs-on: macos-10.15
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 5
+          persist-credentials: false
+
+      - name: Setup Java 11
+        uses: actions/setup-java@v1
+        with:
+          java-version: 11
+
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
+
+      - name: Deploy Release
+        run: |
+          export ANDROID_SDK=$ANDROID_HOME
+          export ANDROID_NDK=$ANDROID_HOME/ndk-bundle
+          ./gradlew publish -PgluonNexusDeployUsername=$NEXUS_DEPLOY_USERNAME -PgluonNexusDeployPassword=$NEXUS_DEPLOY_PASSWORD
+        env:
+          NEXUS_DEPLOY_USERNAME: ${{ secrets.NEXUS_DEPLOY_USERNAME }}
+          NEXUS_DEPLOY_PASSWORD: ${{ secrets.NEXUS_DEPLOY_PASSWORD }}
+
+      - name: Commit next development version
+        if: steps.deploy.outputs.exit_code == 0
+        run: |
+          brew install gnu-sed
+          git config user.email "githubbot@gluonhq.com"
+          git config user.name "Gluon Bot"
+          TAG=${GITHUB_REF/refs\/tags\//}
+          newVersion=${TAG%.*}.$((${TAG##*.} + 1)) # Update version by 1
+          gsed -i -z "0,/version = $TAG/s//version = $newVersion-SNAPSHOT/" gradle.properties
+          git commit gradle.properties -m "Prepare development of $newVersion"
+          git push https://gluon-bot:$PAT@github.com/$GITHUB_REPOSITORY HEAD:master
+        env:
+          PAT: ${{ secrets.PAT }}
