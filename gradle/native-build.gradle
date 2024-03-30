@@ -13,6 +13,8 @@ def sdkPath(String platform) {
     return "/Applications/Xcode.app/Contents/Developer/Platforms/${platform}.platform/Developer/SDKs/${platform}${IOS_VERSION}.sdk";
 }
 
+def AndroidPlatform = 33
+
 configurations {
     util
 }
@@ -123,7 +125,7 @@ ext.aarBuild = { buildDir, projectDir, name, os ->
     if (sdk == null) {
         throw new GradleException("Error: ANDROID_SDK can't be null")
     }
-    def androidJar = sdk + "/platforms/android-33/android.jar"
+    def androidJar = sdk + "/platforms/android-${AndroidPlatform}/android.jar"
     if (!file(androidJar).exists()) {
         throw new GradleException("Error: path for ${androidJar} doesn't exist")
     }
