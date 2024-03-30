@@ -277,19 +277,20 @@ ext.nativeBuildLib = { buildDir, projectDir, name, os ->
                 println "Skipping native-build on iOS: path for ${platform} doesn't exist"
                 return
             }
-            
-            osSources = "$projectDir/src/main/native/$os/${name}.m"
-            
+
+            File nativeSourcesDir = file("$projectDir/src/main/native/$os/")
+            osSources = [nativeSourcesDir.listFiles().findAll {it.name.endsWith(".m")}].flatten()
+
             def compileOutput = "$buildDir/native/ios/$arch"
-            new File(compileOutput).mkdirs()
-            def compileOutputs = ["$buildDir/native/ios/$arch/${name}.o"]
-            def linkerOutput = "$buildDir/native/ios/$arch/lib${name}.a"
-            
+            File outputDir = new File(compileOutput)
+            outputDir.mkdirs()
+
             def clangArgs = [
                 "-xobjective-c",
                 "-mios-version-min=11.0",
                 includeFlags,
                 osIncludeFlags,
+                "-fobjc-arc",
                 "-c",
                 "-fPIC",
                 "-arch", arch,
@@ -302,6 +303,9 @@ ext.nativeBuildLib = { buildDir, projectDir, name, os ->
                 args clangArgs
                 workingDir compileOutput
             }
+
+            def compileOutputs = [outputDir.listFiles().findAll {it.name.endsWith(".o")}].flatten()
+            def linkerOutput = "$buildDir/native/ios/$arch/lib${name}.a"
 
             def linkerArgs = [
                     "-static",
