@@ -43,7 +43,7 @@ static __inline__ void AttachLog(const char *file, int lineNumber, const char *f
         [dateFormatter setTimeZone:[NSTimeZone systemTimeZone]];
     }
     fprintf(stderr, "[AttachLog] %s %s:%3d %s\n", [[dateFormatter stringFromDate:[NSDate date]] UTF8String], funcName, lineNumber, [formattedMessage UTF8String]);
-    [formattedMessage release];
+//    [formattedMessage release];
 }
 
 #define AttachLog(MSG, ...) AttachLog(__FILE__, __LINE__, __PRETTY_FUNCTION__, MSG, ## __VA_ARGS__ )
